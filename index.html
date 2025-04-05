@@ -742,51 +742,23 @@
             });
         }
 
-        // Inicializar la aplicación cuando el DOM esté cargado
+        // Inicializar la aplicación
         document.addEventListener("DOMContentLoaded", function() {
-            // Cargar tema guardado
-            cargarTemaGuardado();
-            
-            // Configurar botón de cambio de tema
-            document.getElementById('themeToggle').addEventListener('click', cambiarTema);
-            
-            // Cargar datos inmediatamente para evitar bucles
+            // Primero, cargamos los datos de respaldo para que siempre haya algo visible
             alimentos = [...datosRespaldo];
+            cargarTemaGuardado();
             actualizarCategoriasDisponibles();
             actualizarBotonesOrdenamiento();
             mostrarAlimentos();
             
-            // Intentar cargar desde API en segundo plano - COMENTADO PARA EVITAR PROBLEMAS
-            /*
-            fetch('https://n8n-jelgezabal-u39578.vm.elestio.app/webhook/api/alimentos')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Error HTTP: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        // Actualizar con datos de API solo si son válidos
-                        alimentos = data;
-                        actualizarCategoriasDisponibles();
-                        actualizarBotonesOrdenamiento();
-                        mostrarAlimentos();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Ya tenemos datos cargados, no es necesario mostrar error
-                });
-            */
+            // Configurar eventos
+            document.getElementById("themeToggle").addEventListener("click", cambiarTema);
             
-            // Configurar selector de categoría
             document.getElementById("categoryFilter").addEventListener("change", function() {
                 estadoApp.categoriaActual = this.value;
                 mostrarAlimentos();
             });
             
-            // Configurar pestañas
             document.querySelectorAll(".tab").forEach(tab => {
                 tab.addEventListener("click", function() {
                     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -794,7 +766,6 @@
                     
                     estadoApp.nutrientesActuales = this.getAttribute("data-tab");
                     
-                    // Mostrar/ocultar opciones de ordenamiento según la pestaña
                     if (estadoApp.nutrientesActuales === "macro") {
                         document.getElementById("macroSorting").style.display = "block";
                         document.getElementById("microSorting").style.display = "none";
@@ -807,24 +778,47 @@
                 });
             });
             
-            // Configurar botones de ordenamiento
             document.querySelectorAll(".sort-pill").forEach(button => {
                 button.addEventListener("click", function() {
                     const campo = this.getAttribute("data-field");
                     
-                    // Actualizar dirección de ordenamiento
                     if (estadoApp.ordenActual.campo === campo) {
                         estadoApp.ordenActual.direccion = estadoApp.ordenActual.direccion === "asc" ? "desc" : "asc";
                     } else {
                         estadoApp.ordenActual.campo = campo;
-                        estadoApp.ordenActual.direccion = "desc"; // Comenzar con orden descendente
+                        estadoApp.ordenActual.direccion = "desc";
                     }
                     
-                    // Actualizar UI y mostrar alimentos
                     actualizarBotonesOrdenamiento();
                     mostrarAlimentos();
                 });
             });
+            
+            // Intento de carga desde la API
+            try {
+                fetch('https://n8n-jelgezabal-u39578.vm.elestio.app/webhook/api/alimentos')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error HTTP: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (Array.isArray(data) && data.length > 0) {
+                            alimentos = data;
+                            actualizarCategoriasDisponibles();
+                            actualizarBotonesOrdenamiento();
+                            mostrarAlimentos();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error cargando datos de API:', error);
+                        // No hacemos nada, ya tenemos los datos de respaldo cargados
+                    });
+            } catch (err) {
+                console.error('Error general en fetch:', err);
+                // No hacemos nada, ya tenemos los datos de respaldo cargados
+            }
         });
     </script>
 </body>
