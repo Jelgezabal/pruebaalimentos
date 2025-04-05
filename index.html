@@ -422,7 +422,7 @@
         // Alimentos
         let alimentos = [];
 
-        // Datos de respaldo
+        // Datos de respaldo actualizados con alimentos veganos
         const datosRespaldo = [
             {
                 "Categoria": "Carnes",
@@ -480,6 +480,64 @@
                 "Vitamina_E": 0,
                 "Folato": 15,
                 "Vitamina_B12": 0
+            },
+            // Alimentos veganos añadidos
+            { 
+                "Categoria": "Vegano",
+                "Nombre": "Copa de Vino (125g)", 
+                "Kcal": 68, 
+                "Proteinas": 0, 
+                "Hidratos": 2.6, 
+                "Grasas": 0, 
+                "Fibra": 0,
+                "Calcio": 8,
+                "Hierro": 0.4,
+                "Magnesio": 10,
+                "Potasio": 127,
+                "Vitamina_A": 0,
+                "Vitamina_C": 0,
+                "Vitamina_D": 0,
+                "Vitamina_E": 0,
+                "Folato": 1,
+                "Vitamina_B12": 0
+            },
+            { 
+                "Categoria": "Vegano",
+                "Nombre": "Ensalada Verde", 
+                "Kcal": 25, 
+                "Proteinas": 1.5, 
+                "Hidratos": 3.8, 
+                "Grasas": 0.3, 
+                "Fibra": 2.1,
+                "Calcio": 35,
+                "Hierro": 1.2,
+                "Magnesio": 15,
+                "Potasio": 240,
+                "Vitamina_A": 112,
+                "Vitamina_C": 14,
+                "Vitamina_D": 0,
+                "Vitamina_E": 0.5,
+                "Folato": 45,
+                "Vitamina_B12": 0
+            },
+            { 
+                "Categoria": "Vegano",
+                "Nombre": "Aguacate", 
+                "Kcal": 160, 
+                "Proteinas": 2, 
+                "Hidratos": 8.5, 
+                "Grasas": 14.7, 
+                "Fibra": 6.7,
+                "Calcio": 12,
+                "Hierro": 0.6,
+                "Magnesio": 29,
+                "Potasio": 485,
+                "Vitamina_A": 7,
+                "Vitamina_C": 10,
+                "Vitamina_D": 0,
+                "Vitamina_E": 2.1,
+                "Folato": 81,
+                "Vitamina_B12": 0
             }
         ];
 
@@ -517,6 +575,50 @@
                         : numB - numA;
                 }
             });
+    </script>
+</body>
+</html>
+            
+            // Configurar pestañas
+            document.querySelectorAll(".tab").forEach(tab => {
+                tab.addEventListener("click", function() {
+                    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+                    this.classList.add("active");
+                    
+                    estadoApp.nutrientesActuales = this.getAttribute("data-tab");
+                    
+                    // Mostrar/ocultar opciones de ordenamiento según la pestaña
+                    if (estadoApp.nutrientesActuales === "macro") {
+                        document.getElementById("macroSorting").style.display = "block";
+                        document.getElementById("microSorting").style.display = "none";
+                    } else {
+                        document.getElementById("macroSorting").style.display = "none";
+                        document.getElementById("microSorting").style.display = "block";
+                    }
+                    
+                    mostrarAlimentos();
+                });
+            });
+            
+            // Configurar botones de ordenamiento
+            document.querySelectorAll(".sort-pill").forEach(button => {
+                button.addEventListener("click", function() {
+                    const campo = this.getAttribute("data-field");
+                    
+                    // Actualizar dirección de ordenamiento
+                    if (estadoApp.ordenActual.campo === campo) {
+                        estadoApp.ordenActual.direccion = estadoApp.ordenActual.direccion === "asc" ? "desc" : "asc";
+                    } else {
+                        estadoApp.ordenActual.campo = campo;
+                        estadoApp.ordenActual.direccion = "desc"; // Comenzar con orden descendente
+                    }
+                    
+                    // Actualizar UI y mostrar alimentos
+                    actualizarBotonesOrdenamiento();
+                    mostrarAlimentos();
+                });
+            });
+        });
         }
 
         // Función para actualizar el contador de alimentos
@@ -726,47 +828,3 @@
                 estadoApp.categoriaActual = this.value;
                 mostrarAlimentos();
             });
-            
-            // Configurar pestañas
-            document.querySelectorAll(".tab").forEach(tab => {
-                tab.addEventListener("click", function() {
-                    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-                    this.classList.add("active");
-                    
-                    estadoApp.nutrientesActuales = this.getAttribute("data-tab");
-                    
-                    // Mostrar/ocultar opciones de ordenamiento según la pestaña
-                    if (estadoApp.nutrientesActuales === "macro") {
-                        document.getElementById("macroSorting").style.display = "block";
-                        document.getElementById("microSorting").style.display = "none";
-                    } else {
-                        document.getElementById("macroSorting").style.display = "none";
-                        document.getElementById("microSorting").style.display = "block";
-                    }
-                    
-                    mostrarAlimentos();
-                });
-            });
-            
-            // Configurar botones de ordenamiento
-            document.querySelectorAll(".sort-pill").forEach(button => {
-                button.addEventListener("click", function() {
-                    const campo = this.getAttribute("data-field");
-                    
-                    // Actualizar dirección de ordenamiento
-                    if (estadoApp.ordenActual.campo === campo) {
-                        estadoApp.ordenActual.direccion = estadoApp.ordenActual.direccion === "asc" ? "desc" : "asc";
-                    } else {
-                        estadoApp.ordenActual.campo = campo;
-                        estadoApp.ordenActual.direccion = "desc"; // Comenzar con orden descendente
-                    }
-                    
-                    // Actualizar UI y mostrar alimentos
-                    actualizarBotonesOrdenamiento();
-                    mostrarAlimentos();
-                });
-            });
-        });
-    </script>
-</body>
-</html>
