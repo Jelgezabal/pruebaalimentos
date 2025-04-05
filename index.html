@@ -756,7 +756,8 @@
             actualizarBotonesOrdenamiento();
             mostrarAlimentos();
             
-            // Intentar cargar desde API en segundo plano
+            // Intentar cargar desde API en segundo plano - COMENTADO PARA EVITAR PROBLEMAS
+            /*
             fetch('https://n8n-jelgezabal-u39578.vm.elestio.app/webhook/api/alimentos')
                 .then(response => {
                     if (!response.ok) {
@@ -777,6 +778,7 @@
                     console.error('Error:', error);
                     // Ya tenemos datos cargados, no es necesario mostrar error
                 });
+            */
             
             // Configurar selector de categoría
             document.getElementById("categoryFilter").addEventListener("change", function() {
@@ -823,3 +825,7 @@
                     mostrarAlimentos();
                 });
             });
+        });
+    </script>
+</body>
+</html>
