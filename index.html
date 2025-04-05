@@ -414,15 +414,15 @@
             nutrientesActuales: "macro",
             ordenActual: {
                 campo: "Nombre",
-                direccion: "desc"  // Cambiado a "desc" para ordenar de mayor a menor inicialmente
+                direccion: "desc"
             },
-            tema: "dark"  // Tema oscuro por defecto
+            tema: "dark"
         };
 
         // Alimentos
         let alimentos = [];
 
-        // Datos de respaldo actualizados con alimentos veganos
+        // Datos de respaldo con alimentos veganos incluidos
         const datosRespaldo = [
             {
                 "Categoria": "Carnes",
@@ -543,7 +543,6 @@
 
         // Función para filtrar alimentos por categoría
         function filtrarPorCategoria(alimentos, categoria) {
-            // Si es "todas", mostrar todos excepto los veganos
             if (categoria === "todas") {
                 return alimentos.filter(a => a.Categoria !== "Vegano");
             } else {
@@ -575,50 +574,6 @@
                         : numB - numA;
                 }
             });
-    </script>
-</body>
-</html>
-            
-            // Configurar pestañas
-            document.querySelectorAll(".tab").forEach(tab => {
-                tab.addEventListener("click", function() {
-                    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-                    this.classList.add("active");
-                    
-                    estadoApp.nutrientesActuales = this.getAttribute("data-tab");
-                    
-                    // Mostrar/ocultar opciones de ordenamiento según la pestaña
-                    if (estadoApp.nutrientesActuales === "macro") {
-                        document.getElementById("macroSorting").style.display = "block";
-                        document.getElementById("microSorting").style.display = "none";
-                    } else {
-                        document.getElementById("macroSorting").style.display = "none";
-                        document.getElementById("microSorting").style.display = "block";
-                    }
-                    
-                    mostrarAlimentos();
-                });
-            });
-            
-            // Configurar botones de ordenamiento
-            document.querySelectorAll(".sort-pill").forEach(button => {
-                button.addEventListener("click", function() {
-                    const campo = this.getAttribute("data-field");
-                    
-                    // Actualizar dirección de ordenamiento
-                    if (estadoApp.ordenActual.campo === campo) {
-                        estadoApp.ordenActual.direccion = estadoApp.ordenActual.direccion === "asc" ? "desc" : "asc";
-                    } else {
-                        estadoApp.ordenActual.campo = campo;
-                        estadoApp.ordenActual.direccion = "desc"; // Comenzar con orden descendente
-                    }
-                    
-                    // Actualizar UI y mostrar alimentos
-                    actualizarBotonesOrdenamiento();
-                    mostrarAlimentos();
-                });
-            });
-        });
         }
 
         // Función para actualizar el contador de alimentos
@@ -827,4 +782,44 @@
             document.getElementById("categoryFilter").addEventListener("change", function() {
                 estadoApp.categoriaActual = this.value;
                 mostrarAlimentos();
+            });
+            
+            // Configurar pestañas
+            document.querySelectorAll(".tab").forEach(tab => {
+                tab.addEventListener("click", function() {
+                    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+                    this.classList.add("active");
+                    
+                    estadoApp.nutrientesActuales = this.getAttribute("data-tab");
+                    
+                    // Mostrar/ocultar opciones de ordenamiento según la pestaña
+                    if (estadoApp.nutrientesActuales === "macro") {
+                        document.getElementById("macroSorting").style.display = "block";
+                        document.getElementById("microSorting").style.display = "none";
+                    } else {
+                        document.getElementById("macroSorting").style.display = "none";
+                        document.getElementById("microSorting").style.display = "block";
+                    }
+                    
+                    mostrarAlimentos();
+                });
+            });
+            
+            // Configurar botones de ordenamiento
+            document.querySelectorAll(".sort-pill").forEach(button => {
+                button.addEventListener("click", function() {
+                    const campo = this.getAttribute("data-field");
+                    
+                    // Actualizar dirección de ordenamiento
+                    if (estadoApp.ordenActual.campo === campo) {
+                        estadoApp.ordenActual.direccion = estadoApp.ordenActual.direccion === "asc" ? "desc" : "asc";
+                    } else {
+                        estadoApp.ordenActual.campo = campo;
+                        estadoApp.ordenActual.direccion = "desc"; // Comenzar con orden descendente
+                    }
+                    
+                    // Actualizar UI y mostrar alimentos
+                    actualizarBotonesOrdenamiento();
+                    mostrarAlimentos();
+                });
             });
