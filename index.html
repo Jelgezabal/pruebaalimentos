@@ -700,7 +700,7 @@
             mostrarAlimentos();
             
             // Intentar cargar desde API en segundo plano
-            fetch('https://jelgezabal.app.n8n.cloud/webhook/api/alimentos')
+            fetch('https://n8n-jelgezabal-u39578.vm.elestio.app/webhook/api/alimentos')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Error HTTP: ${response.status}`);
